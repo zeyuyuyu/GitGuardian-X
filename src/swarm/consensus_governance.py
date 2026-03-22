@@ -1,31 +1,37 @@
 import random
 
 class ConsensusGovernance:
-    def __init__(self, agents):
-        self.agents = agents
+    def __init__(self, swarm_size):
+        self.swarm_size = swarm_size
+        self.voter_pool = [i for i in range(swarm_size)]
         self.proposals = []
-        self.votes = {}
+        self.vote_tallies = {}
 
-    def propose(self, agent, proposal):
+    def submit_proposal(self, proposal):
         self.proposals.append(proposal)
-        self.votes[proposal] = {}
-        for a in self.agents:
-            self.votes[proposal][a] = 0
+        self.vote_tallies[proposal] = [0, 0] # [for, against]
 
-    def vote(self, agent, proposal, vote):
-        if proposal in self.proposals:
-            self.votes[proposal][agent] = vote
-
-    def tally(self, proposal):
-        if proposal in self.proposals:
-            total_votes = sum(self.votes[proposal].values())
-            if total_votes >= len(self.agents) * 0.51:
-                return True
-        return False
-
-    def execute(self, proposal):
-        if self.tally(proposal):
-            # Execute the proposal
-            print(f"Proposal '{proposal}' has been executed.")
+    def cast_vote(self, agent_id, proposal, is_affirmative):
+        if agent_id not in self.voter_pool:
+            return False
+        if proposal not in self.proposals:
+            return False
+        if is_affirmative:
+            self.vote_tallies[proposal][0] += 1
         else:
-            print(f"Proposal '{proposal}' did not reach consensus.")
+            self.vote_tallies[proposal][1] += 1
+        self.voter_pool.remove(agent_id)
+        return True
+
+    def tally_votes(self, proposal):
+        if proposal not in self.proposals:
+            return None
+        for_votes, against_votes = self.vote_tallies[proposal]
+        total_votes = for_votes + against_votes
+        if total_votes >= self.swarm_size * 0.51:  # Majority rule
+            return for_votes > against_votes
+        else:
+            return None # Quorum not reached
+
+    def select_random_voters(self, num_voters):
+        return random.sample(self.voter_pool, num_voters)
