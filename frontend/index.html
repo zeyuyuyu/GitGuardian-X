@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Archive Hero - Save The Internet!</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body class="bg-gradient-to-br from-purple-900 to-indigo-700 min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Hero Section with Gamification -->
+        <div class="text-center mb-12 animate__animated animate__fadeIn">
+            <h1 class="text-5xl font-bold mb-4">Become a Web Archive Hero! 🦸‍♂️</h1>
+            <p class="text-xl">Join <span id="activeUsers" class="font-bold text-yellow-400">2,547</span> heroes saving the internet</p>
+            <div class="mt-4">
+                <div class="bg-white/20 rounded-full p-4 inline-block">
+                    <span class="text-2xl">Your Archive Power: </span>
+                    <span id="userPoints" class="text-4xl font-bold text-yellow-400">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Archive Interface -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 mb-8 animate__animated animate__fadeInUp">
+            <input type="url" id="urlInput" placeholder="Enter any URL to archive" class="w-full p-4 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-white/70 text-lg mb-4">
+            <button onclick="archiveAndShare()" class="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold py-4 px-8 rounded-lg w-full transform hover:scale-105 transition-all">
+                🚀 Archive & Share (+100 points)
+            </button>
+        </div>
+
+        <!-- Achievement Showcase -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center transform hover:scale-105 transition-all cursor-pointer">
+                <div class="text-4xl mb-2">🏆</div>
+                <h3 class="text-xl font-bold mb-2">Digital Guardian</h3>
+                <p>Archived 10 pages</p>
+                <div class="mt-2 bg-white/20 rounded-full h-2">
+                    <div class="bg-green-400 h-full rounded-full" style="width: 60%"></div>
+                </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center transform hover:scale-105 transition-all cursor-pointer">
+                <div class="text-4xl mb-2">⭐</div>
+                <h3 class="text-xl font-bold mb-2">Internet Historian</h3>
+                <p>Share 5 archives</p>
+                <div class="mt-2 bg-white/20 rounded-full h-2">
+                    <div class="bg-yellow-400 h-full rounded-full" style="width: 40%"></div>
+                </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center transform hover:scale-105 transition-all cursor-pointer">
+                <div class="text-4xl mb-2">🌟</div>
+                <h3 class="text-xl font-bold mb-2">Web Pioneer</h3>
+                <p>Invite 3 friends</p>
+                <div class="mt-2 bg-white/20 rounded-full h-2">
+                    <div class="bg-blue-400 h-full rounded-full" style="width: 20%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6">
+            <h2 class="text-2xl font-bold mb-4">🏅 Top Web Heroes</h2>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between bg-white/5 p-4 rounded-lg">
+                    <div class="flex items-center gap-4">
+                        <span class="text-yellow-400 font-bold">1</span>
+                        <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=Felix" class="w-10 h-10 rounded-full">
+                        <span>DigitalHero_42</span>
+                    </div>
+                    <span class="font-bold">12,450 pts</span>
+                </div>
+                <!-- More leaderboard entries... -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Share Modal -->
+    <div id="shareModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 max-w-md w-full animate__animated animate__zoomIn">
+            <h3 class="text-2xl font-bold mb-4">🎉 Page Archived Successfully!</h3>
+            <p class="mb-4">Share your achievement to earn bonus points!</p>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="shareToTwitter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                    Share
+                </button>
+                <button onclick="closeShareModal()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulated viral mechanics
+        function archiveAndShare() {
+            document.getElementById('shareModal').classList.remove('hidden');
+            updatePoints(100);
+            updateActiveUsers();
+        }
+
+        function shareToTwitter() {
+            const text = `🦸‍♂️ I just saved another piece of the internet as a Web Archive Hero! Join me in preserving digital history! #WebArchiveHero`;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`);
+            updatePoints(50);
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
+        }
+
+        function updatePoints(points) {
+            const currentPoints = parseInt(document.getElementById('userPoints').innerText);
+            document.getElementById('userPoints').innerText = currentPoints + points;
+        }
+
+        function updateActiveUsers() {
+            const current = parseInt(document.getElementById('activeUsers').innerText);
+            document.getElementById('activeUsers').innerText = current + Math.floor(Math.random() * 5) + 1;
+        }
+
+        // Simulate active users increasing
+        setInterval(updateActiveUsers, 30000);
+    </script>
+</body>
+</html>
